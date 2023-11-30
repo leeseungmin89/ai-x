@@ -1,0 +1,26 @@
+<!-- test.html -->
+<html>
+    <head>
+        <title>Camera Stream</title>
+    </head>
+    <body>
+        <h1>Camera Stream</h1>
+        <img id="videoFeed" src="">
+        <script>
+            const videoFeed = document.getElementById('videoFeed');
+            const source = new EventSource('/video_feed');
+
+            source.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                if (data.image) {
+                    videoFeed.src = 'data:image/jpeg;base64,' + data.image;
+                }
+            };
+
+            source.onerror = function(err) {
+                console.error("EventSource failed:", err);
+                source.close();
+            };
+        </script>
+    </body>
+</html>

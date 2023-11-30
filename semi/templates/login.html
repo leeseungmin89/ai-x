@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script>
+        async function login(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch('/login', {
+                method: 'POST',
+                body: formData
+            });
+    
+            if (!response.ok) {
+                alert('아이디/패스워드를 확인하세요');
+                window.location.href = '/login';
+                return;
+            }
+    
+            const result = await response.json();
+            // if (result.status === "success") {
+            //     document.body.innerHTML = result.html;
+            // }
+            if (result.status === "success") {
+            // 로그인 성공 시 리디렉션 URL로 이동
+                window.location.href = result.redirect;
+            } else {
+                // 로그인 실패 시 알림 메시지 표시
+                alert(result.message);
+            }
+        }
+    </script>
+</head>
+<body>
+    <form onsubmit="login(event)">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="로그인">
+    </form>
+    <button onclick="window.location.href='/register'">회원가입</button>
+</body>
+</html>
